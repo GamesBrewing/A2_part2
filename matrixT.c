@@ -40,17 +40,22 @@ int main() {
 
         /** create threads with entry function matrixMultiplyThread 
             and pass thread_data[i] as an argument **/
-            // -----> write your code here
+    for (int i = 0; i < NUM_THREADS; i++) {
+        thread_data[i].thread_id = i;
+        pthread_create(&threads[i], NULL, matrixMultiplyThread, &thread_data[i]);
+    }
     }
 
     // Wait for all threads to complete
-        // ------> write your code here
+    for (int i = 0; i < NUM_THREADS; i++) {
+        pthread_join(threads[i], NULL);
+    }
 
     printf("Matrix multiplication complete!\n");
 
     // Display the resulting matrix C
-    // displayMatrix(C, N);
-
+    //displayMatrix(C, 5);
+  
     // Free dynamically allocated memory
     for (int i = 0; i < N; ++i) {
         free(A[i]);
