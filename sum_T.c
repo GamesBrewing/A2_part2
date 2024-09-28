@@ -2,7 +2,10 @@
 #include <pthread.h>
 
 #define SIZE 1000000
-#define NUM_THREADS 4
+//#define NUM_THREADS 4
+//#define NUM_THREADS 3
+//#define NUM_THREADS 2
+#define NUM_THREADS 1
 
 long long int arr[SIZE];
 long long int partialSums[NUM_THREADS] = {0}; // Array to store partial sums for each thread
@@ -13,7 +16,6 @@ void* sumPart(void* arg) {
     int thread_id = *(int*)arg;
     int start = thread_id * (SIZE / NUM_THREADS);  // Define range start 
     int end = (thread_id + 1) * (SIZE / NUM_THREADS);  // Define range end
-    //printf ("Thread: %d\n", thread_id);
     for (int i = start; i < end; i++) {
        partialSums[thread_id] += arr[i];
     }
@@ -27,7 +29,6 @@ int main() {
 
     pthread_t threads[NUM_THREADS];
     int thread_ids[NUM_THREADS];
-    //int d = SIZE % NUM_THREADS; // divide the total size into how many threads is wanted. If SIZE doesn't cleanly divide by NUM_THREAD, then the last thread will do the extra work.
 
     // Create threads to compute partial sums
         for (int i = 0; i < NUM_THREADS; i++) {
