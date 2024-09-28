@@ -3,10 +3,10 @@
 #include <pthread.h>
 
 #define N 1000  // Size of the matrix
-#define NUM_THREADS 4
+//#define NUM_THREADS 4
 //#define NUM_THREADS 3
 //#define NUM_THREADS 2
-//#define NUM_THREADS 1
+#define NUM_THREADS 1
 int **A, **B, **C;  // Global matrices
 
 // Information holder for each thread
