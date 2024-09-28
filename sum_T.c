@@ -4,13 +4,19 @@
 #define SIZE 1000000
 #define NUM_THREADS 4
 
-int arr[SIZE];
-int partialSums[NUM_THREADS] = {0}; // Array to store partial sums for each thread
+long long int arr[SIZE];
+long long int partialSums[NUM_THREADS] = {0}; // Array to store partial sums for each thread
 
 // Entry function for each thread
 void* sumPart(void* arg) {
     // Divide the work for each thread based on their id and let them compute partial sums
-        // -----> Write your code here
+    int thread_id = *(int*)arg;
+    int start = thread_id * (SIZE / NUM_THREADS);  // Define range start 
+    int end = (thread_id + 1) * (SIZE / NUM_THREADS);  // Define range end
+    //printf ("Thread: %d\n", thread_id);
+    for (int i = start; i < end; i++) {
+       partialSums[thread_id] += arr[i];
+    }
 }
 
 int main() {
@@ -21,21 +27,27 @@ int main() {
 
     pthread_t threads[NUM_THREADS];
     int thread_ids[NUM_THREADS];
-    int d = SIZE % NUM_THREADS; // divide the total size into how many threads is wanted. If SIZE doesn't cleanly divide by NUM_THREAD, then the last thread will do the extra work.
+    //int d = SIZE % NUM_THREADS; // divide the total size into how many threads is wanted. If SIZE doesn't cleanly divide by NUM_THREAD, then the last thread will do the extra work.
 
     // Create threads to compute partial sums
-        // ------> Write your code here
+        for (int i = 0; i < NUM_THREADS; i++) {
+        thread_ids[i] = i;
+        pthread_create(&threads[i], NULL, sumPart, &thread_ids[i]);
+    }
 
     // Wait for all threads to finish
-        // -------> Write your code here
-
+     for (int i = 0; i < NUM_THREADS; i++) {
+        pthread_join(threads[i], NULL);
+    }
     // Combine the partial sums from all threads
-    int totalSum = 0;
+     long long int totalSum = 0;
     for (int i = 0; i < NUM_THREADS; i++) {
+        printf ("partialSum[%d]:", i);
+        printf ("%lli\n", partialSums[i]);
         totalSum += partialSums[i];
     }
 
-    printf("Total Sum: %d\n", totalSum);
+    printf("Total Sum: %lli\n", totalSum);
 
     return 0;
 }
